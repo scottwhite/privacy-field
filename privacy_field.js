@@ -1,16 +1,17 @@
-all_seeing_eye = (function(){
+window.all_seeing_eye = (function(){
   var super_secret = {};
   var last_mask_field;
+  const mask_length = 10;
 
 function check_if_should_mask(evnt){
   let n = evnt.target;
-  if(last_mask_field && last_mask_field.value !== '' && last_mask_field.id  != n.id){
+  if(last_mask_field && (last_mask_field.value !== '' || last_mask_field.nodeName !== 'INPUT') && last_mask_field.id  != n.id){
     if(!n.id || !super_secret[n.id]){
       let current = current_secret(last_mask_field);
       console.debug('check_if_should_mask ', 'check masking ', current);
       current.base_mask_shown = false;
       if(current.mask){
-        last_mask_field.value = maskit(10);  
+        last_mask_field.nodeName === 'INPUT' ? last_mask_field.value = maskit(mask_length) : last_mask_field.innerHTML = maskit(mask_length);  
         current.base_mask_shown = true;
       }
       last_mask_field = null;
@@ -23,7 +24,7 @@ function click_check_if_should_mask(evnt){
   if(last_mask_field && last_mask_field.value !== '' && last_mask_field.id  != n.id){
     console.debug('click_check_if_should_mask ',last_mask_field);
     if(!n.id || !super_secret[n.id]){
-      last_mask_field.value = maskit(10);
+      last_mask_field.value = maskit(mask_length);
     }
   }
 }
@@ -43,20 +44,34 @@ function genid(){
 }
 
 function setup_all_seeing_eye(eye, input_setup){
-  let maskid = genid();
+  var maskid = genid();
+  while(super_secret[maskid]){
+    maskid = genid();
+  }
   eye.setAttribute('id', maskid);
   eye.setAttribute('style', 'display:inline;');
   input_setup.setAttribute('maskid', maskid);
   if(!input_setup.id){
     input_setup.setAttribute('id', 'input-'+maskid);
   }
-  input_setup.setAttribute('autocomplete', 'off');
-  super_secret[maskid] = {
-    input: input_setup.id,
-    value: input_setup.value || '',
-    mask: true
-  };
-  addListeners(input_setup);
+  if(input_setup.nodeName === 'INPUT'){
+    input_setup.setAttribute('autocomplete', 'off');
+    super_secret[maskid] = {
+      input: input_setup.id,
+      value: input_setup.value || '',
+      mask: true
+    };
+    addListeners(input_setup);
+  }
+  else{
+    super_secret[maskid] = {
+      input: input_setup.id,
+      value: input_setup.innerHTML,
+      mask: true
+    };
+    input_setup.innerHTML = maskit(mask_length)
+    eye.setAttribute('style', 'top: 0px; right: 0px');
+  }
   eye.addEventListener('click', function(evnt){
     let eye = evnt.target;
     while(eye.tagName.toLowerCase() != 'button'){
@@ -67,11 +82,11 @@ function setup_all_seeing_eye(eye, input_setup){
     if(eye.classList.contains('off')){
       eye.classList.remove('off');
       current.mask = true;
-      input.value = maskit(input.value.length);
+      input_setup.nodeName === 'INPUT' ? input.value = maskit(input.value.length) : input.innerHTML = maskit(mask_length);
     }else{
       eye.classList.add('off');
       current.mask = false;
-      input.value = current.value;
+      input_setup.nodeName === 'INPUT' ? input.value = current.value : input.innerHTML = current.value;
     }
     input.focus();
     evnt.preventDefault();
@@ -83,57 +98,6 @@ function current_secret(n){
   let eyeid = n.getAttribute('maskid');
   return super_secret[eyeid];
 }
-
-// function XcheckBack(evnt){
-//   console.debug('checkBack ', evnt.target.value);
-//   console.debug(evnt.charCode);
-//   let current = current_secret(evnt.target);
-//   let temp = current.value || '';
-//   function updateBackspace(){
-//     if(evnt.target.value == ''){
-//       temp = '';
-//     }else{
-//       temp = temp.substring(0, temp.length - 1);  
-//     }
-//     console.debug('temp up ', temp);
-//     current.value = temp;
-//   }
-//   let code = evnt.keyCode;
-//   if("Backspace" === evnt.key){
-//     console.debug('value ', evnt.target.value);
-//     updateBackspace();
-//   }else if(code && code == 8 || code == 46){
-//     updateBackspace();
-//   }
-// }
-
-
-// function XcheckKeypress(evnt){
-//   console.debug('checkKeypress ', evnt.target.value);
-//   let code;
-//   console.debug(evnt.charCode);
-//   if(evnt.key && /^[ a-z0-9]{1,1}$/i.test(evnt.key)){
-//     code = evnt.key
-//     console.debug('is space', /\s/.test(code));
-//   }else if(evnt.keyCode){
-//     code = String.fromCharCode(evnt.keyCode);
-//     if(!/^[ a-z0-9]{1,1}$/i.test(code)){
-//       code = null;
-//     }
-//   }
-//   if(code){
-//     let current = current_secret(evnt.target);
-//     let temp = current.value || '';
-//     temp += code;
-//     if(current.mask){
-//       evnt.target.value = maskit(temp.length);      
-//       evnt.preventDefault();
-//       evnt.stopPropagation();
-//     }
-//     current.value = temp;
-//     console.debug('temp press ', temp); 
-//   }
-// }
 
 
 function checkInput(evnt){
@@ -195,7 +159,7 @@ function createEye(){
   svg_eye.setAttributeNS(null, 'class', 'all-seeing-eye');
   svg_eye.setAttributeNS(null, 'x', '0px');
   svg_eye.setAttributeNS(null, 'y', '0px');
-  svg_eye.setAttributeNS(null, 'viewBox', '0 0 18 12');
+  svg_eye.setAttributeNS(null, 'viewBox', '-1 -1 20 14');
   let svg_g = document.createElementNS("http://www.w3.org/2000/svg", "g");
   let svg_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
   svg_circle.setAttributeNS(null, 'cx','9');
@@ -214,9 +178,9 @@ function setup(){
   let style = document.createElement('style');
   style.type='text/css';
   style.innerHTML = ['.all-seeing-text{padding-right:40px;}',
-  '.all-seeing-eye-btn > svg{ height: 18px; fill: #3b6980;}',
-  '.all-seeing-eye-btn.off > svg{ fill: #c7cbce;}',
-  '.all-seeing-eye-btn{ padding: 0; position: relative; top:5px; margin-left: -40px; cursor: pointer; background: transparent; border: none;}',
+  '.all-seeing-eye-btn > svg{ height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
+  '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
+  '.all-seeing-eye-btn{ padding: 0; position: relative; top:2px; margin-left: -30px; cursor: pointer; background: transparent; border: none;}',
   '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
   document.getElementsByTagName('head')[0].appendChild(style);
   let targets = document.getElementsByClassName('all-seeing-text');
