@@ -12,7 +12,7 @@
         text-align: center;
       }
     </style>
-    <script src="https://raw.githubusercontent.com/scottwhite/privacy-field/master/privacy_field.js"></script>
+    <script src="privacy_field.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function(){
         let t = document.getElementById('toast');
@@ -40,10 +40,19 @@
           }
         });
       })
+      function makeNew(){
+        let papaDiv = document.createElement('div');
+        let newDiv = document.createElement('div');
+        newDiv.setAttribute('class', 'all-seeing-text');
+        newDiv.innerHTML = 'IT BROKE SON';
+        newDiv.setAttribute('style', 'display: inline');
+        papaDiv.appendChild(newDiv)
+        document.getElementById('root').appendChild(papaDiv);
+      }
     </script>
     </head>
     <body>
-      <div>
+      <div id='root'>
         <div style='display: inline-block'>
         <div class="all-seeing-text" style="display: inline; width: 100%">Privacy stuff a there</div>
         </div>
@@ -63,10 +72,11 @@
             <input type="text"  name="eggs" placeholder="eggs">
           </div>
           <div>
-            <input id="toast" type="text"  maxlength="5" class="all-seeing-text" name="toast" placeholder="private toast">
+            <input id="toast" type="text"  maxlength="5" class="all-seeing-text" name="toast" placeholder="private toast" value="get some">
           </div>
           <button type="submit">DO IT</button>
         </form>
+        <button onClick='javascript:makeNew()'>SHIT DONT WORK</button>
       </div>
     </body>
 </html>

@@ -30,6 +30,7 @@ function click_check_if_should_mask(evnt){
 }
 
 function maskit(len){
+  len = len || 10;
   let masked='';
   for(let i=0;i<len;i++){
     masked += '\u25CF';
@@ -55,9 +56,9 @@ function setup_all_seeing_eye(eye, input_setup){
     clone_input.classList.remove('all-seeing-text');
     clone_input.classList.add('all-seeing-clone');
     let p =  input_setup.parentNode;
+    input_setup.setAttribute('maskid', maskid);
     clone_input.setAttribute('maskid', maskid);
     clone_input.setAttribute('id', 'input-'+maskid);
-    //clone_input.setAttribute('name', (input_setup.name || maskid) + '-clone');
     clone_input.removeAttribute('name');
     p.insertBefore(clone_input, eye);
     input_setup.setAttribute('style', 'display:none');
@@ -71,6 +72,9 @@ function setup_all_seeing_eye(eye, input_setup){
       value: clone_input.value || '',
       mask: true
     };
+    if(input_setup.value){
+      clone_input.setAttribute('value', maskit());
+    }
     addListeners(clone_input);
   }else{
     input_setup.setAttribute('maskid', maskid);
@@ -105,6 +109,11 @@ function setup_all_seeing_eye(eye, input_setup){
     evnt.preventDefault();
     evnt.stopPropagation();
   });
+}
+
+
+function check_if_done(node){
+  return (node.hasAttribute('maskid'));
 }
 
 function current_secret(n){
@@ -190,6 +199,13 @@ function createEye(){
 }
 
 function setup(){
+  if(observer){
+    try{
+      observer.disconnect();
+    }catch(e){
+      console.error('hurling ', e);
+    }
+  }
   let style = document.createElement('style');
   style.type='text/css';
   style.innerHTML = [
@@ -203,15 +219,22 @@ function setup(){
   document.getElementsByTagName('head')[0].appendChild(style);
   let targets = document.getElementsByClassName('all-seeing-text');
   for(let i=0;i< targets.length; i++){
-    let eye = createEye();
-    let t = targets[i];
-    let p = t.parentNode;
-    p.appendChild(eye);
-    setup_all_seeing_eye(eye,t);
+    if(!check_if_done(targets[i])){
+      let eye = createEye();
+      let t = targets[i];
+      let p = t.parentNode;
+      p.appendChild(eye);
+      setup_all_seeing_eye(eye,t);
+    }
   }
   document.body.addEventListener('focusin', check_if_should_mask);
   document.addEventListener('click', check_if_should_mask);
   document.addEventListener('touch', check_if_should_mask);
+  // configuration of the observer:
+  var config = { attributes: true, childList: true, subtree: true, characterData: true };
+  // pass in the target node, as well as the observer options
+  let body = document.getElementsByTagName('body')[0];
+  observer.observe(body, config);
 }
   
 function cleanup(){
@@ -224,6 +247,14 @@ function cleanup(){
 document.addEventListener('DOMContentLoaded', function(){
   setup();
 })
+
+//mutation check
+var observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    console.log(mutation.type);
+    setup();
+  });    
+});
 
 return {
   super_secrets: super_secret,
