@@ -44,26 +44,38 @@ function genid(){
 }
 
 function setup_all_seeing_eye(eye, input_setup){
-  var maskid = genid();
+  let maskid = genid();
   while(super_secret[maskid]){
     maskid = genid();
   }
   eye.setAttribute('id', maskid);
   eye.setAttribute('style', 'display:inline;');
-  input_setup.setAttribute('maskid', maskid);
-  if(!input_setup.id){
-    input_setup.setAttribute('id', 'input-'+maskid);
-  }
-  if(input_setup.nodeName === 'INPUT'){
-    input_setup.setAttribute('autocomplete', 'off');
+  if(input_setup.nodeName.toLowerCase() === 'input'){
+    let clone_input = input_setup.cloneNode();
+    clone_input.classList.remove('all-seeing-text');
+    clone_input.classList.add('all-seeing-clone');
+    let p =  input_setup.parentNode;
+    clone_input.setAttribute('maskid', maskid);
+    clone_input.setAttribute('id', 'input-'+maskid);
+    clone_input.setAttribute('name', (input_setup.name || maskid) + '-clone');
+    p.insertBefore(clone_input, eye);
+    input_setup.setAttribute('style', 'display:none');
+    if(!input_setup.id){
+      input_setup.setAttribute('id', 'org-input-'+maskid);
+    }
+    clone_input.setAttribute('autocomplete', 'off');
     super_secret[maskid] = {
-      input: input_setup.id,
-      value: input_setup.value || '',
+      input: clone_input.id,
+      org_input: input_setup.id,
+      value: clone_input.value || '',
       mask: true
     };
-    addListeners(input_setup);
-  }
-  else{
+    addListeners(clone_input);
+  }else{
+    input_setup.setAttribute('maskid', maskid);
+    if(!input_setup.id){
+      input_setup.setAttribute('id', 'input-'+maskid);
+    }
     super_secret[maskid] = {
       input: input_setup.id,
       value: input_setup.innerHTML,
@@ -128,6 +140,8 @@ function checkInput(evnt){
       evnt.stopPropagation();
     }
   }
+  let org = document.getElementById(current.org_input);
+  org.value = current.value;
 }
 
 function checkBlur(evnt){
@@ -177,11 +191,14 @@ function createEye(){
 function setup(){
   let style = document.createElement('style');
   style.type='text/css';
-  style.innerHTML = ['.all-seeing-text{padding-right:40px;}',
-  '.all-seeing-eye-btn > svg{ height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
-  '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
-  '.all-seeing-eye-btn{ padding: 0; position: relative; top:2px; margin-left: -30px; cursor: pointer; background: transparent; border: none;}',
-  '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
+  style.innerHTML = [
+    '.all-seeing-clone{padding-right:40px;}',
+    '.all-seeing-eye-btn > svg{ height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
+    '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
+    '.all-seeing-eye-btn{ padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
+    'input + .all-seeing-eye-btn{ top:2px; margin-left: -30px;}',
+    '.all-seeing-eye-btn:hover{ background: transparent}',
+    '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
   document.getElementsByTagName('head')[0].appendChild(style);
   let targets = document.getElementsByClassName('all-seeing-text');
   for(let i=0;i< targets.length; i++){

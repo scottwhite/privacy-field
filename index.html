@@ -2,7 +2,45 @@
 <html>
     <head>
     <title>Test</title>
+    <style>
+      .big-warning{
+        font-size:2em;
+        color: red;
+        border: 1px solid;
+        border-radius: 5px 5px;
+        width: 100px;
+        text-align: center;
+      }
+    </style>
     <script src="privacy_field.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        let t = document.getElementById('toast');
+        let f = document.getElementsByTagName('form')[0];
+        f.addEventListener('submit', function(evnt){
+          for(let i=0;i< f.elements.length;i++){
+            let e = f.elements[i];
+            if(e.name){
+              console.debug(e.value);
+            }
+          }
+        });
+        t.addEventListener('change', function(evnt){
+          let n = evnt.target;
+          if(n.value !='toast'){
+            console.error('it is not toast');
+            let div = document.createElement('div');
+            div.setAttribute('class', 'big-waring');
+            let text = document.createTextNode('It is not TOAST!!!');
+            div.appendChild(text);
+            
+            let f = document.body.firstChild;
+            document.body.insertBefore(div,f);
+
+          }
+        });
+      })
+    </script>
     </head>
     <body>
       <div>
@@ -17,7 +55,7 @@
         <div>
         <div class="all-seeing-text" style="display: inline">Privacy stuff here</div>
         </div>
-        <form>
+        <form method="post">
           <div>
             <input type="text" class="all-seeing-text" name="bacon" placeholder="private bacon">
           </div>
@@ -25,8 +63,9 @@
             <input type="text"  name="eggs" placeholder="eggs">
           </div>
           <div>
-            <input type="text"  class="all-seeing-text" name="toast" placeholder="private toast">
+            <input id="toast" type="text"  maxlength="5" class="all-seeing-text" name="toast" placeholder="private toast">
           </div>
+          <button type="submit">DO IT</button>
         </form>
       </div>
     </body>
