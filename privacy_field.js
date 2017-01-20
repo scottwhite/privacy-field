@@ -203,14 +203,15 @@ function cleanup(){
   document.body.removeListener('touch', check_if_should_mask);
 }
 
+document.addEventListener('DOMContentLoaded', function(){
+  setup();
+})
+
 return {
   super_secrets: super_secret,
   setup: setup,
   cleanup: cleanup
 };
-  
-})();
 
-document.addEventListener('DOMContentLoaded', function(){
-  all_seeing_eye.setup();
-})
+
+})();
