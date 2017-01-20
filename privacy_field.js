@@ -57,7 +57,8 @@ function setup_all_seeing_eye(eye, input_setup){
     let p =  input_setup.parentNode;
     clone_input.setAttribute('maskid', maskid);
     clone_input.setAttribute('id', 'input-'+maskid);
-    clone_input.setAttribute('name', (input_setup.name || maskid) + '-clone');
+    //clone_input.setAttribute('name', (input_setup.name || maskid) + '-clone');
+    clone_input.removeAttribute('name');
     p.insertBefore(clone_input, eye);
     input_setup.setAttribute('style', 'display:none');
     if(!input_setup.id){
