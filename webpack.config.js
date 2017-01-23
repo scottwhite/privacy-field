@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: './privacy_field.js',
+  entry: './privacy-field.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename:'privacy-field.min.js'
@@ -30,7 +30,7 @@ module.exports = {
       compress: {warnings: true, unused: false}
     }),
     new CopyWebpackPlugin([{
-      from: 'privacy_field.js', to: 'privacy-field.js'
+      from: 'privacy-field.js', to: 'privacy-field.js'
     }])
   ],
   //todo: get this working I guessssssssss
