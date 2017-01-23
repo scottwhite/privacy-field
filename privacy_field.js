@@ -1,7 +1,9 @@
 window.all_seeing_eye = (function(){
   var super_secret = {};
   var last_mask_field;
+  var is_setting_up = false;
   const mask_length = 10;
+  const STYLE_ID = 'all-seeing-eye-css';
 
 function check_if_should_mask(evnt){
   let n = evnt.target;
@@ -81,13 +83,17 @@ function setup_all_seeing_eye(eye, input_setup){
     if(!input_setup.id){
       input_setup.setAttribute('id', 'input-'+maskid);
     }
+    let box = input_setup.getBoundingClientRect();
+    eye.style.height = box.height + 'px';
+    eye.style.marginLeft = '20px';
+    eye.style.top = '0px';
+    eye.style.left = '0px';
     super_secret[maskid] = {
       input: input_setup.id,
       value: input_setup.innerHTML,
       mask: true
     };
     input_setup.innerHTML = maskit(mask_length)
-    eye.setAttribute('style', 'top: 0px; right: 0px');
   }
   eye.addEventListener('click', function(evnt){
     let eye = evnt.target;
@@ -199,24 +205,43 @@ function createEye(){
 }
 
 function setup(){
+  if(is_setting_up){
+    console.debug('setup: ', is_setting_up);
+    return;
+  }
+  is_setting_up = true;
   if(observer){
     try{
+      observer.takeRecords();
       observer.disconnect();
+      console.log('should be not firing')
     }catch(e){
       console.error('hurling ', e);
     }
   }
-  let style = document.createElement('style');
-  style.type='text/css';
-  style.innerHTML = [
-    '.all-seeing-clone{padding-right:40px;}',
-    '.all-seeing-eye-btn > svg{ height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
-    '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
-    '.all-seeing-eye-btn{ padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
-    'input + .all-seeing-eye-btn{ top:2px; margin-left: -30px;}',
-    '.all-seeing-eye-btn:hover{ background: transparent}',
-    '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
-  document.getElementsByTagName('head')[0].appendChild(style);
+  let styles = document.getElementsByTagName('style');
+  let existing_style = false;
+  for(let i=0;i< styles.length; i++){
+    console.debug(i);
+    if(styles[i].id === STYLE_ID){
+      existing_style = true;
+      continue;
+    }
+  }
+  if(!existing_style){  
+    let style = document.createElement('style');
+    style.type='text/css';
+    style.id = STYLE_ID;
+    style.innerHTML = [
+      '.all-seeing-clone{padding-right:40px;}',
+      '.all-seeing-eye-btn > svg{ height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
+      '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
+      '.all-seeing-eye-btn{ padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
+      'input + .all-seeing-eye-btn{ top:2px; margin-left: -30px;}',
+      '.all-seeing-eye-btn:hover{ background: transparent}',
+      '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
+    document.getElementsByTagName('head')[0].appendChild(style);
+  }
   let targets = document.getElementsByClassName('all-seeing-text');
   for(let i=0;i< targets.length; i++){
     if(!check_if_done(targets[i])){
@@ -235,6 +260,7 @@ function setup(){
   // pass in the target node, as well as the observer options
   let body = document.getElementsByTagName('body')[0];
   observer.observe(body, config);
+  is_setting_up = false;
 }
   
 function cleanup(){
@@ -246,11 +272,11 @@ function cleanup(){
 
 //mutation check
 var observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    console.log(mutation.type);
-    setup();
-  });    
-});
+      mutations.forEach(function(mutation) {
+        console.log(mutation.target);
+        setup();
+      });    
+    });
 
 
 //run setup since we can't be sure the dom hasn't rendered before hand
