@@ -244,10 +244,6 @@ function cleanup(){
   document.body.removeListener('touch', check_if_should_mask);
 }
 
-document.addEventListener('DOMContentLoaded', function(){
-  setup();
-})
-
 //mutation check
 var observer = new MutationObserver(function(mutations) {
   mutations.forEach(function(mutation) {
@@ -255,6 +251,10 @@ var observer = new MutationObserver(function(mutations) {
     setup();
   });    
 });
+
+
+//run setup since we can't be sure the dom hasn't rendered before hand
+setup();
 
 return {
   super_secrets: super_secret,
