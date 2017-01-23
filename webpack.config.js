@@ -1,12 +1,13 @@
 const path = require('path');
 const webpack = require('webpack'); 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './privacy_field.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename:'privacy_field.min.js'
+    filename:'privacy-field.min.js'
   },
   module: {
     loaders: [
@@ -27,7 +28,10 @@ module.exports = {
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
       compress: {warnings: true, unused: false}
-    })  
+    }),
+    new CopyWebpackPlugin([{
+      from: 'privacy_field.js', to: 'privacy-field.js'
+    }])
   ],
   //todo: get this working I guessssssssss
   // plugins: [

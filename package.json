@@ -28,6 +28,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "copy-webpack-plugin": "^4.0.1",
     "webpack-s3-plugin": "^0.9.2"
   }
 }
