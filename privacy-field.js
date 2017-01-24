@@ -52,7 +52,6 @@ function setup_all_seeing_eye(eye, input_setup){
     maskid = genid();
   }
   eye.setAttribute('id', maskid);
-  
   let box = input_setup.getBoundingClientRect();
   if(input_setup.nodeName.toLowerCase() === 'input'){
     let clone_input = input_setup.cloneNode();
@@ -70,7 +69,10 @@ function setup_all_seeing_eye(eye, input_setup){
     }
     clone_input.setAttribute('autocomplete', 'off');
     let cs = window.getComputedStyle(clone_input, null);
-    eye.style.height = box.height + 'px';
+    let ps = Number.parseInt(cs.getPropertyValue('padding-top'));
+    let bs = Number.parseInt(cs.getPropertyValue('border-top-width'));
+    let ih = Number.parseInt(cs.getPropertyValue('height'));
+    eye.style.height = ps + bs + ih + 'px';
     super_secret[maskid] = {
       input: clone_input.id,
       org_input: input_setup.id,
