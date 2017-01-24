@@ -69,8 +69,8 @@ function setup_all_seeing_eye(eye, input_setup){
     }
     clone_input.setAttribute('autocomplete', 'off');
     let cs = window.getComputedStyle(clone_input, null);
-    let ps = Number.parseFloat(cs.getPropertyValue('padding-top')) + Number.parseFloat(cs.getPropertyValue('padding-bottom'));
-    let bs = Number.parseFloat(cs.getPropertyValue('border-top-width')) + Number.parseFloat(cs.getPropertyValue('border-bottom-width'));
+    let ps = parseFloat(cs.getPropertyValue('padding-top')) + parseFloat(cs.getPropertyValue('padding-bottom'));
+    let bs = parseFloat(cs.getPropertyValue('border-top-width')) + parseFloat(cs.getPropertyValue('border-bottom-width'));
     let ih = box.height;
     eye.style.height = ih + 'px';
     super_secret[maskid] = {
@@ -225,7 +225,6 @@ function setup(){
   let styles = document.getElementsByTagName('style');
   let existing_style = false;
   for(let i=0;i< styles.length; i++){
-    console.debug(i);
     if(styles[i].id === STYLE_ID){
       existing_style = true;
       continue;
@@ -283,7 +282,7 @@ var observer = new MutationObserver(function(mutations) {
       });    
     });
 
-
+    
 //run setup since we can't be sure the dom hasn't rendered before hand
 setup();
 
