@@ -52,7 +52,7 @@ function setup_all_seeing_eye(eye, input_setup){
     maskid = genid();
   }
   eye.setAttribute('id', maskid);
-  eye.setAttribute('style', 'display:inline;');
+  
   let box = input_setup.getBoundingClientRect();
   if(input_setup.nodeName.toLowerCase() === 'input'){
     let clone_input = input_setup.cloneNode();
@@ -70,7 +70,7 @@ function setup_all_seeing_eye(eye, input_setup){
     }
     clone_input.setAttribute('autocomplete', 'off');
     let cs = window.getComputedStyle(clone_input, null);
-    eye.style.height = cs.getPropertyValue('height');
+    eye.style.height = box.height + 'px';
     super_secret[maskid] = {
       input: clone_input.id,
       org_input: input_setup.id,
@@ -235,9 +235,9 @@ function setup(){
     style.id = STYLE_ID;
     style.innerHTML = [
       '.all-seeing-clone{padding-right:40px;}',
-      '.all-seeing-eye-btn > svg{ height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
+      '.all-seeing-eye-btn > svg{ align-self: center;height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
       '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
-      '.all-seeing-eye-btn{ padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
+      '.all-seeing-eye-btn{ display:inline-flex;justify-content:center;padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
       'input + .all-seeing-eye-btn{ top:2px; margin-left: -21px;}',
       '.all-seeing-eye-btn:hover{ background: transparent}',
       '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
