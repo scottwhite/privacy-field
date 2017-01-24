@@ -269,9 +269,9 @@ function setup(){
   
 function cleanup(){
   super_secret = {};
-  document.body.removeListener('focusin', check_if_should_mask);
-  document.body.removeListener('click', check_if_should_mask);
-  document.body.removeListener('touch', check_if_should_mask);
+  document.body.removeEventListener('focusin', check_if_should_mask);
+  document.removeEventListener('click', check_if_should_mask);
+  document.removeEventListener('touch', check_if_should_mask);
 }
 
 //mutation check
