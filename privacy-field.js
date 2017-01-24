@@ -69,9 +69,9 @@ function setup_all_seeing_eye(eye, input_setup){
     }
     clone_input.setAttribute('autocomplete', 'off');
     let cs = window.getComputedStyle(clone_input, null);
-    let ps = Number.parseInt(cs.getPropertyValue('padding-top'));
-    let bs = Number.parseInt(cs.getPropertyValue('border-top-width'));
-    let ih = Number.parseInt(cs.getPropertyValue('height'));
+    let ps = Number.parseFloat(cs.getPropertyValue('padding-top')) + Number.parseFloat(cs.getPropertyValue('padding-bottom'));
+    let bs = Number.parseFloat(cs.getPropertyValue('border-top-width')) + Number.parseFloat(cs.getPropertyValue('border-bottom-width'));
+    let ih = Number.parseFloat(cs.getPropertyValue('height'));
     eye.style.height = ps + bs + ih + 'px';
     super_secret[maskid] = {
       input: clone_input.id,
@@ -236,11 +236,11 @@ function setup(){
     style.type='text/css';
     style.id = STYLE_ID;
     style.innerHTML = [
-      '.all-seeing-clone{padding-right:40px;}',
+      '.all-seeing-clone{padding-right:30px;}',
       '.all-seeing-eye-btn > svg{ align-self: center;height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
       '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
-      '.all-seeing-eye-btn{ display:inline-flex;justify-content:center;padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
-      'input + .all-seeing-eye-btn{ top:2px; margin-left: -21px;}',
+      '.all-seeing-eye-btn{ display:inline-flex;justify-content:center;padding: 0; position: absolute; cursor: pointer; background: transparent; border: none;}',
+      'input + .all-seeing-eye-btn{margin-left: -21px;}',
       '.all-seeing-eye-btn:hover{ background: transparent}',
       '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
     document.getElementsByTagName('head')[0].appendChild(style);
