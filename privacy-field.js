@@ -88,6 +88,7 @@ function setup_all_seeing_eye(eye, input_setup){
     eye.style.marginLeft = '20px';
     eye.style.top = '0px';
     eye.style.left = '0px';
+    eye.style.verticalAlign = 'text-top;'
     super_secret[maskid] = {
       input: input_setup.id,
       value: input_setup.innerHTML,
