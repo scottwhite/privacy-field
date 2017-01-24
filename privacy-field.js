@@ -89,7 +89,7 @@ function setup_all_seeing_eye(eye, input_setup){
       input_setup.setAttribute('id', 'input-'+maskid);
     }
     eye.style.height = box.height + 'px';
-    eye.style.marginLeft = '20px';
+    eye.style.marginLeft = '10px';
     eye.style.top = '0px';
     eye.style.left = '0px';
     eye.style.verticalAlign = 'text-top';
