@@ -2,6 +2,7 @@ window.all_seeing_eye = (function(){
   var super_secret = {};
   var last_mask_field;
   var is_setting_up = false;
+  var config_set = false;
   const mask_length = 10;
   const STYLE_ID = 'all-seeing-eye-css';
 
@@ -256,9 +257,12 @@ function setup(){
       setup_all_seeing_eye(eye,t);
     }
   }
-  document.body.addEventListener('focusin', check_if_should_mask);
-  document.addEventListener('click', check_if_should_mask);
-  document.addEventListener('touch', check_if_should_mask);
+  if(!config_set){
+    document.body.addEventListener('focusin', check_if_should_mask);
+    document.addEventListener('click', check_if_should_mask);
+    document.addEventListener('touch', check_if_should_mask);
+    config_set = true;
+  }
   // configuration of the observer:
   var config = { attributes: true, childList: true, subtree: true, characterData: true };
   // pass in the target node, as well as the observer options
@@ -277,7 +281,6 @@ function cleanup(){
 //mutation check
 var observer = new MutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
-        console.log(mutation.target);
         setup();
       });    
     });
