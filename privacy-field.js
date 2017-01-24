@@ -239,8 +239,8 @@ function setup(){
       '.all-seeing-clone{padding-right:30px;}',
       '.all-seeing-eye-btn > svg{ align-self: center;height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
       '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
-      '.all-seeing-eye-btn{ display:inline-flex;justify-content:center;padding: 0; position: absolute; cursor: pointer; background: transparent; border: none;}',
-      'input + .all-seeing-eye-btn{margin-left: -21px;}',
+      '.all-seeing-eye-btn{ display:inline-flex;justify-content:center;padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
+      'input + .all-seeing-eye-btn{margin-left: -21px;position: absolute}',
       '.all-seeing-eye-btn:hover{ background: transparent}',
       '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
     document.getElementsByTagName('head')[0].appendChild(style);
