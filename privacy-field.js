@@ -78,7 +78,7 @@ function setup_all_seeing_eye(eye, input_setup){
       clone_input.setAttribute('value', maskit());
     }
     addListeners(clone_input);
-  }else{
+  }else if (input_setup.textContent !== ''){
     input_setup.setAttribute('maskid', maskid);
     if(!input_setup.id){
       input_setup.setAttribute('id', 'input-'+maskid);
@@ -246,7 +246,9 @@ function setup(){
       let eye = createEye();
       let t = targets[i];
       let p = t.parentNode;
-      p.appendChild(eye);
+      if(t.nodeName === 'INPUT' || t.nodeName !== 'INPUT' && t.textContent !== ''){
+        p.appendChild(eye);
+      }
       setup_all_seeing_eye(eye,t);
     }
   }
