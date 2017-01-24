@@ -72,7 +72,7 @@ function setup_all_seeing_eye(eye, input_setup){
     let ps = Number.parseFloat(cs.getPropertyValue('padding-top')) + Number.parseFloat(cs.getPropertyValue('padding-bottom'));
     let bs = Number.parseFloat(cs.getPropertyValue('border-top-width')) + Number.parseFloat(cs.getPropertyValue('border-bottom-width'));
     let ih = box.height;
-    eye.style.height = (ih - (ps + bs)) + 'px';
+    eye.style.height = ih + 'px';
     super_secret[maskid] = {
       input: clone_input.id,
       org_input: input_setup.id,
