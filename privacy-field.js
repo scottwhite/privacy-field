@@ -212,11 +212,9 @@ function setup(){
   is_setting_up = true;
   if(observer){
     try{
-      observer.takeRecords();
       observer.disconnect();
-      console.log('should be not firing')
     }catch(e){
-      console.error('hurling ', e);
+      console.error('setup: ', e);
     }
   }
   let styles = document.getElementsByTagName('style');
@@ -237,7 +235,7 @@ function setup(){
       '.all-seeing-eye-btn > svg{ height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
       '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
       '.all-seeing-eye-btn{ padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
-      'input + .all-seeing-eye-btn{ top:2px; margin-left: -30px;}',
+      'input + .all-seeing-eye-btn{ top:2px; margin-left: -21px;}',
       '.all-seeing-eye-btn:hover{ background: transparent}',
       '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
     document.getElementsByTagName('head')[0].appendChild(style);
