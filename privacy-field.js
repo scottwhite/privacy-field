@@ -71,9 +71,8 @@ function setup_all_seeing_eye(eye, input_setup){
     let cs = window.getComputedStyle(clone_input, null);
     let ps = Number.parseFloat(cs.getPropertyValue('padding-top')) + Number.parseFloat(cs.getPropertyValue('padding-bottom'));
     let bs = Number.parseFloat(cs.getPropertyValue('border-top-width')) + Number.parseFloat(cs.getPropertyValue('border-bottom-width'));
-    let ih = Number.parseFloat(cs.getPropertyValue('height'));
-    console.debug('button height: ', ps + bs + ih);
-    eye.style.height = ps + bs + ih + 'px';
+    let ih = box.height;
+    eye.style.height = (ih - (ps + bs)) + 'px';
     super_secret[maskid] = {
       input: clone_input.id,
       org_input: input_setup.id,
