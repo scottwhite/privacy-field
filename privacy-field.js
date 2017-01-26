@@ -111,7 +111,13 @@ function setup_all_seeing_eye(eye, input_setup){
     if(eye.classList.contains('off')){
       eye.classList.remove('off');
       current.mask = true;
-      input_setup.nodeName === 'INPUT' ? input.value = maskit(input.value.length) : input.innerHTML = maskit(mask_length);
+      if(input_setup.nodeName === 'INPUT'){
+        if(input_setup.value && input_setup.value != ''){
+          input.value = maskit(input.value.length)
+        }
+      }else{
+        input.innerHTML = maskit(mask_length);
+      }
     }else{
       eye.classList.add('off');
       current.mask = false;
@@ -136,8 +142,10 @@ function current_secret(n){
 
 function checkInput(evnt){
   let current = current_secret(evnt.target);
+  let org = document.getElementById(current.org_input);
   if(!current.mask){
     current.value = evnt.target.value;
+    org.value = current.value;
     return;
   }
   let existing = evnt.target.value;
@@ -162,7 +170,6 @@ function checkInput(evnt){
       evnt.stopPropagation();
     }
   }
-  let org = document.getElementById(current.org_input);
   org.value = current.value;
 }
 
@@ -240,7 +247,7 @@ function setup(){
       '.all-seeing-eye-btn > svg{ align-self: center;height: 12px; width:18px; stroke: #c7cbce;fill: transparent;}',
       '.all-seeing-eye-btn.off > svg{ height: 12px; width: 18px; stroke:none; fill: #3b6980;}',
       '.all-seeing-eye-btn{ display:inline-flex;justify-content:center;padding: 0; position: relative; cursor: pointer; background: transparent; border: none;}',
-      'input + .all-seeing-eye-btn{margin-left: -25px;top:2px}',
+      'input + .all-seeing-eye-btn{margin-left: -21px;top:2px}',
       '.all-seeing-eye-btn:hover{ background: transparent}',
       '.all-seeing-eye-btn:focus{outline: none}'].join(' ');
     document.getElementsByTagName('head')[0].appendChild(style);
