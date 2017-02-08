@@ -11,7 +11,6 @@ function check_if_should_mask(evnt){
   if(last_mask_field && (last_mask_field.value !== '' || last_mask_field.nodeName !== 'INPUT') && last_mask_field.id  != n.id){
     if(!n.id || !super_secret[n.id]){
       let current = current_secret(last_mask_field);
-      console.debug('check_if_should_mask ', 'check masking ', current);
       current.base_mask_shown = false;
       if(current.mask){
         last_mask_field.nodeName === 'INPUT' ? last_mask_field.value = maskit(mask_length) : last_mask_field.innerHTML = maskit(mask_length);  
@@ -25,7 +24,6 @@ function check_if_should_mask(evnt){
 function click_check_if_should_mask(evnt){
   let n = evnt.target;
   if(last_mask_field && last_mask_field.value !== '' && last_mask_field.id  != n.id){
-    console.debug('click_check_if_should_mask ',last_mask_field);
     if(!n.id || !super_secret[n.id]){
       last_mask_field.value = maskit(mask_length);
     }
@@ -219,7 +217,6 @@ function createEye(){
 
 function setup(){
   if(is_setting_up){
-    console.debug('setup: ', is_setting_up);
     return;
   }
   is_setting_up = true;
@@ -227,7 +224,9 @@ function setup(){
     try{
       observer.disconnect();
     }catch(e){
-      console.error('setup: ', e);
+      if(console && console.error){
+        console.error('setup: ', e);
+      }
     }
   }
   let styles = document.getElementsByTagName('style');
